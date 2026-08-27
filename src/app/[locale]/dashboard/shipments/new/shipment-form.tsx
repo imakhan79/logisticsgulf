@@ -12,7 +12,10 @@ export function ShipmentForm({ locale }: { locale: string }) {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<ShipmentInput>({ resolver: zodResolver(shipmentSchema) });
+  } = useForm<ShipmentInput>({
+    resolver: zodResolver(shipmentSchema),
+    defaultValues: { status: "pending" },
+  });
 
   async function onSubmit(values: ShipmentInput) {
     setServerError(null);
@@ -25,27 +28,24 @@ export function ShipmentForm({ locale }: { locale: string }) {
       {serverError && <p className="text-sm text-red-600">{serverError}</p>}
 
       <div>
-        <label className="block text-sm font-medium">Tracking number</label>
-        <input {...register("tracking_number")} className="w-full rounded-md border px-3 py-2 text-sm" />
-        {errors.tracking_number && (
-          <p className="text-xs text-red-600">{errors.tracking_number.message}</p>
-        )}
+        <label className="block text-sm font-medium">Shipment number</label>
+        <input {...register("shipment_no")} className="w-full rounded-md border px-3 py-2 text-sm" />
+        {errors.shipment_no && <p className="text-xs text-red-600">{errors.shipment_no.message}</p>}
       </div>
 
       <div>
-        <label className="block text-sm font-medium">Origin address</label>
-        <input {...register("origin_address")} className="w-full rounded-md border px-3 py-2 text-sm" />
-        {errors.origin_address && (
-          <p className="text-xs text-red-600">{errors.origin_address.message}</p>
-        )}
+        <label className="block text-sm font-medium">Status</label>
+        <select {...register("status")} className="w-full rounded-md border px-3 py-2 text-sm">
+          <option value="pending">Pending</option>
+          <option value="in_transit">In transit</option>
+          <option value="delivered">Delivered</option>
+          <option value="cancelled">Cancelled</option>
+        </select>
       </div>
 
       <div>
-        <label className="block text-sm font-medium">Destination address</label>
-        <input {...register("destination_address")} className="w-full rounded-md border px-3 py-2 text-sm" />
-        {errors.destination_address && (
-          <p className="text-xs text-red-600">{errors.destination_address.message}</p>
-        )}
+        <label className="block text-sm font-medium">ETA</label>
+        <input type="datetime-local" {...register("eta")} className="w-full rounded-md border px-3 py-2 text-sm" />
       </div>
 
       <button

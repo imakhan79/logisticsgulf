@@ -26,8 +26,11 @@ export async function createShipment(locale: string, values: unknown) {
 
   if (!membership) return { error: "No company membership found for this user" };
 
+  const { eta, ...rest } = parsed.data;
+
   const { error } = await supabase.from("shipments").insert({
-    ...parsed.data,
+    ...rest,
+    eta: eta || null,
     company_id: membership.company_id,
     country_id: membership.country_id,
     created_by: user.id,

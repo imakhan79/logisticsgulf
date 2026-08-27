@@ -8,7 +8,7 @@ export default async function ShipmentsPage() {
   // RLS scopes this to the caller's companies automatically.
   const { data, error } = await supabase
     .from("shipments")
-    .select("id, tracking_number, status, origin_address, destination_address, created_at")
+    .select("id, shipment_no, status, eta, created_at")
     .order("created_at", { ascending: false })
     .limit(50);
 

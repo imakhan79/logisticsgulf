@@ -5,18 +5,23 @@ import { DataTable } from "@/components/data-table";
 
 export type Shipment = {
   id: string;
-  tracking_number: string;
+  shipment_no: string;
   status: string;
-  origin_address: string | null;
-  destination_address: string | null;
+  eta: string | null;
   created_at: string;
 };
 
 const columns: ColumnDef<Shipment>[] = [
-  { accessorKey: "tracking_number", header: "Tracking #" },
+  { accessorKey: "shipment_no", header: "Shipment #" },
   { accessorKey: "status", header: "Status" },
-  { accessorKey: "origin_address", header: "Origin" },
-  { accessorKey: "destination_address", header: "Destination" },
+  {
+    accessorKey: "eta",
+    header: "ETA",
+    cell: ({ getValue }) => {
+      const value = getValue<string | null>();
+      return value ? new Date(value).toLocaleString() : "-";
+    },
+  },
   {
     accessorKey: "created_at",
     header: "Created",
