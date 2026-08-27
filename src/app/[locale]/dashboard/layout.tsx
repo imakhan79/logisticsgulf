@@ -1,31 +1,9 @@
-import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-
-const nav = [
-  { href: "", label: "Overview" },
-  { href: "quotes", label: "Quotes" },
-  { href: "orders", label: "Orders" },
-  { href: "shipments", label: "Shipments" },
-  { href: "branches", label: "Branches" },
-  { href: "routes", label: "Routes" },
-  { href: "tracking", label: "Tracking" },
-  { href: "customers", label: "Customers" },
-  { href: "vehicles", label: "Vehicles" },
-  { href: "drivers", label: "Drivers" },
-  { href: "fleet", label: "Fleet" },
-  { href: "warehouses", label: "Warehouses" },
-  { href: "inventory", label: "Inventory" },
-  { href: "deliveries", label: "Deliveries" },
-  { href: "customs", label: "Customs" },
-  { href: "invoices", label: "Invoices" },
-  { href: "payments", label: "Payments" },
-  { href: "reports", label: "Reports" },
-  { href: "settings", label: "Settings" },
-  { href: "users", label: "Users" },
-  { href: "roles", label: "Roles" },
-  { href: "audit", label: "Audit" },
-];
+import { can } from "@/lib/permissions";
+import { Sidebar } from "@/components/dashboard/sidebar";
+import { Topbar } from "@/components/dashboard/topbar";
+import { NAV_GROUPS } from "@/components/dashboard/nav-config";
 
 export default async function DashboardLayout({
   children,
@@ -42,23 +20,29 @@ export default async function DashboardLayout({
 
   if (!user) redirect(`/${locale}/login`);
 
+  const permissionKeys = Array.from(
+    new Set(NAV_GROUPS.flatMap((g) => g.items.map((i) => i.permission).filter(Boolean) as string[])),
+  );
+
+  const [results, { data: notifications }] = await Promise.all([
+    Promise.all(permissionKeys.map((key) => can(key))),
+    supabase
+      .from("notifications")
+      .select("id, type, title, message, read, created_at")
+      .eq("user_id", user.id)
+      .order("created_at", { ascending: false })
+      .limit(20),
+  ]);
+
+  const visiblePermissions = new Set(permissionKeys.filter((_, i) => results[i]));
+
   return (
-    <div className="flex min-h-screen flex-1">
-      <aside className="w-56 shrink-0 border-e bg-neutral-50 p-4">
-        <div className="mb-6 text-sm font-semibold">Gulf RouteWise</div>
-        <nav className="space-y-1">
-          {nav.map((item) => (
-            <Link
-              key={item.label}
-              href={`/${locale}/dashboard/${item.href}`}
-              className="block rounded-md px-3 py-2 text-sm text-neutral-700 hover:bg-neutral-100"
-            >
-              {item.label}
-            </Link>
-          ))}
-        </nav>
-      </aside>
-      <div className="flex-1">{children}</div>
+    <div className="flex min-h-screen">
+      <Sidebar locale={locale} visiblePermissions={visiblePermissions} />
+      <div className="flex flex-1 flex-col">
+        <Topbar locale={locale} userEmail={user.email ?? ""} notifications={notifications ?? []} />
+        <div className="flex-1 bg-surface">{children}</div>
+      </div>
     </div>
   );
 }

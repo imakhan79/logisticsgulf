@@ -1,14 +1,14 @@
 {
   "login": {
-    "title": "Sign in to Gulf RouteWise",
-    "subtitle": "Multi-tenant logistics platform",
+    "title": "Welcome back.",
+    "subtitle": "Sign in to your Gulf RouteWise control center.",
     "email": "Email",
     "password": "Password",
     "signIn": "Sign in",
     "magicLinkEmail": "Email for magic link",
     "sendMagicLink": "Send magic link",
-    "google": "Google",
-    "microsoft": "Microsoft"
+    "google": "Continue with Google",
+    "microsoft": "Continue with Microsoft"
   },
   "dashboard": {
     "title": "Dashboard",

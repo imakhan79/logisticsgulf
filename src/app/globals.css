@@ -1,26 +1,101 @@
 @import "tailwindcss";
 
 :root {
+  /* Gulf Logistics Intelligence palette */
+  --color-navy-950: #050e1f;
+  --color-navy-900: #0a1a33;
+  --color-navy-800: #0f2647;
+  --color-navy-700: #16345e;
+  --color-navy-600: #1d4276;
+
+  --color-ocean-600: #14538f;
+  --color-ocean-500: #1b6bb3;
+  --color-ocean-400: #3a89d1;
+
+  --color-teal-500: #0f9e96;
+  --color-teal-400: #17b8ae;
+  --color-teal-300: #4fd1c8;
+
+  --color-gold-500: #c9982f;
+  --color-gold-400: #dbb254;
+  --color-gold-300: #e8cb84;
+
   --background: #ffffff;
-  --foreground: #171717;
+  --surface: #f6f8fa;
+  --surface-raised: #ffffff;
+  --foreground: var(--color-navy-950);
+  --foreground-muted: #5b6b82;
+  --border-subtle: #e4e9ef;
+
+  --brand-primary: var(--color-navy-900);
+  --brand-secondary: var(--color-ocean-500);
+  --brand-accent: var(--color-teal-500);
+  --brand-highlight: var(--color-gold-500);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-foreground-muted: var(--foreground-muted);
+  --color-border-subtle: var(--border-subtle);
+
+  --color-navy-950: var(--color-navy-950);
+  --color-navy-900: var(--color-navy-900);
+  --color-navy-800: var(--color-navy-800);
+  --color-navy-700: var(--color-navy-700);
+  --color-navy-600: var(--color-navy-600);
+  --color-ocean-600: var(--color-ocean-600);
+  --color-ocean-500: var(--color-ocean-500);
+  --color-ocean-400: var(--color-ocean-400);
+  --color-teal-500: var(--color-teal-500);
+  --color-teal-400: var(--color-teal-400);
+  --color-teal-300: var(--color-teal-300);
+  --color-gold-500: var(--color-gold-500);
+  --color-gold-400: var(--color-gold-400);
+  --color-gold-300: var(--color-gold-300);
+
+  --color-brand-primary: var(--brand-primary);
+  --color-brand-secondary: var(--brand-secondary);
+  --color-brand-accent: var(--brand-accent);
+  --color-brand-highlight: var(--brand-highlight);
+
+  --font-sans: var(--font-jakarta);
+  --font-arabic: var(--font-noto-arabic);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+:root[data-theme="dark"],
+:root:not([data-theme="light"]) {
+  @media (prefers-color-scheme: dark) {
+    --background: var(--color-navy-950);
+    --surface: #08152b;
+    --surface-raised: #0c1e3a;
+    --foreground: #eef2f7;
+    --foreground-muted: #93a3ba;
+    --border-subtle: #16294a;
   }
+}
+
+* {
+  border-color: var(--border-subtle);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

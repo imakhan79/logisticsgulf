@@ -1,14 +1,14 @@
 {
   "login": {
-    "title": "تسجيل الدخول إلى Gulf RouteWise",
-    "subtitle": "منصة لوجستية متعددة المستأجرين",
+    "title": "أهلاً بعودتك.",
+    "subtitle": "سجّل الدخول إلى مركز تحكم Gulf RouteWise.",
     "email": "البريد الإلكتروني",
     "password": "كلمة المرور",
     "signIn": "تسجيل الدخول",
     "magicLinkEmail": "البريد الإلكتروني لرابط الدخول السريع",
     "sendMagicLink": "إرسال رابط الدخول",
-    "google": "جوجل",
-    "microsoft": "مايكروسوفت"
+    "google": "المتابعة عبر جوجل",
+    "microsoft": "المتابعة عبر مايكروسوفت"
   },
   "dashboard": {
     "title": "لوحة التحكم",
