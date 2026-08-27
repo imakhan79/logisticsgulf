@@ -11,4 +11,10 @@ export const DEMO_USERS = [
   { role: "finance", email: "finance@demo.logisticsgulf.com", label: "Finance" },
   { role: "driver", email: "driver@demo.logisticsgulf.com", label: "Driver" },
   { role: "customer", email: "customer@demo.logisticsgulf.com", label: "Customer" },
+  { role: "customs_manager", email: "customs@demo.logisticsgulf.com", label: "Customs Manager" },
+  { role: "port_operations_manager", email: "portops@demo.logisticsgulf.com", label: "Port Operations" },
+  { role: "customer_service_manager", email: "cs@demo.logisticsgulf.com", label: "Customer Service" },
+  { role: "procurement_manager", email: "procurement@demo.logisticsgulf.com", label: "Procurement" },
+  { role: "hr_manager", email: "hr@demo.logisticsgulf.com", label: "HR Manager" },
+  { role: "compliance_manager", email: "compliance@demo.logisticsgulf.com", label: "Compliance" },
 ] as const;

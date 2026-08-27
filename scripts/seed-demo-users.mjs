@@ -18,6 +18,12 @@ const DEMO_USERS = [
   { role: "finance", email: "finance@demo.logisticsgulf.com", name: "Demo Finance" },
   { role: "driver", email: "driver@demo.logisticsgulf.com", name: "Demo Driver" },
   { role: "customer", email: "customer@demo.logisticsgulf.com", name: "Demo Customer" },
+  { role: "customs_manager", email: "customs@demo.logisticsgulf.com", name: "Demo Customs Manager" },
+  { role: "port_operations_manager", email: "portops@demo.logisticsgulf.com", name: "Demo Port Operations Manager" },
+  { role: "customer_service_manager", email: "cs@demo.logisticsgulf.com", name: "Demo Customer Service Manager" },
+  { role: "procurement_manager", email: "procurement@demo.logisticsgulf.com", name: "Demo Procurement Manager" },
+  { role: "hr_manager", email: "hr@demo.logisticsgulf.com", name: "Demo HR Manager" },
+  { role: "compliance_manager", email: "compliance@demo.logisticsgulf.com", name: "Demo Compliance Manager" },
 ];
 
 const client = new Client({ connectionString: process.env.DATABASE_URL });

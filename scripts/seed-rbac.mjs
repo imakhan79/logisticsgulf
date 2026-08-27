@@ -6,7 +6,7 @@ config({ path: ".env.local" });
 const MODULES = [
   "quotes", "orders", "shipments", "routes", "vehicles", "drivers", "warehouses",
   "inventory", "deliveries", "customers", "invoices", "payments",
-  "expenses", "customs", "ports", "users", "reports",
+  "expenses", "customs", "ports", "users", "reports", "support", "procurement",
 ];
 const STANDARD_ACTIONS = ["view", "create", "edit", "delete", "export"];
 const SPECIAL_PERMISSIONS = [
@@ -126,10 +126,10 @@ const ROLE_PERMISSIONS = {
   accountant: [...some("invoices", ["view", "create", "edit"]), ...manage("payments"), ...manage("expenses"), ...view("reports"), ...view("orders")],
   sales_manager: [...manage("customers"), ...some("orders", ["view", "create", "edit"]), ...view("reports"), ...manage("quotes"), "quotes.approve", "quotes.convert"],
   sales_executive: [...some("customers", ["view", "create", "edit"]), ...some("orders", ["view", "create"]), ...some("quotes", ["view", "create", "edit"])],
-  customer_service_manager: [...view("customers"), ...view("orders"), ...view("shipments"), ...view("deliveries")],
-  customer_service_agent: [...view("customers"), ...view("shipments")],
-  procurement_manager: [...manage("expenses")],
-  hr_manager: [...view("drivers")],
+  customer_service_manager: [...view("customers"), ...view("orders"), ...view("shipments"), ...view("deliveries"), ...manage("support")],
+  customer_service_agent: [...view("customers"), ...view("shipments"), ...some("support", ["view", "create", "edit"])],
+  procurement_manager: [...manage("expenses"), ...manage("procurement")],
+  hr_manager: [...view("drivers"), "users.view"],
   compliance_manager: [...view("vehicles"), ...view("drivers"), ...view("customs"), ...view("reports")],
   maintenance_manager: [...some("vehicles", ["view", "edit"]), ...view("reports")],
   maintenance_technician: [...some("vehicles", ["view", "edit"])],

@@ -2,6 +2,7 @@ import {
   LayoutDashboard, FileText, ClipboardList, Package, Route as RouteIcon, MapPin,
   Building2, Users, Truck, IdCard, Gauge, Warehouse, Boxes, PackageCheck,
   FileCheck, Receipt, CreditCard, BarChart3, Settings, UserCog, ShieldCheck, History,
+  Ship, Headset, Handshake,
   type LucideIcon,
 } from "lucide-react";
 
@@ -42,6 +43,7 @@ export const NAV_GROUPS: NavGroup[] = [
       { href: "inventory", label: "Inventory", icon: Boxes, permission: "inventory.view" },
       { href: "deliveries", label: "Deliveries", icon: PackageCheck, permission: "deliveries.view" },
       { href: "customs", label: "Customs", icon: FileCheck, permission: "customs.view" },
+      { href: "ports", label: "Ports", icon: Ship, permission: "ports.view" },
     ],
   },
   {
@@ -49,12 +51,14 @@ export const NAV_GROUPS: NavGroup[] = [
     items: [
       { href: "invoices", label: "Invoices", icon: Receipt, permission: "invoices.view" },
       { href: "payments", label: "Payments", icon: CreditCard, permission: "payments.view" },
+      { href: "procurement", label: "Procurement", icon: Handshake, permission: "procurement.view" },
       { href: "reports", label: "Reports", icon: BarChart3, permission: "reports.view" },
     ],
   },
   {
     label: "Administration",
     items: [
+      { href: "support", label: "Support", icon: Headset, permission: "support.view" },
       { href: "settings", label: "Settings", icon: Settings },
       { href: "users", label: "Users", icon: UserCog, permission: "users.view" },
       { href: "roles", label: "Roles", icon: ShieldCheck, permission: "users.view" },

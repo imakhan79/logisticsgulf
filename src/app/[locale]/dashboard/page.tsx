@@ -14,6 +14,12 @@ import { FinanceDashboard } from "./views/finance";
 import { SalesDashboard } from "./views/sales";
 import { CustomerDashboard } from "./views/customer";
 import { AuditorDashboard } from "./views/auditor";
+import { CustomsDashboard } from "./views/customs";
+import { PortOperationsDashboard } from "./views/port-operations";
+import { CustomerServiceDashboard } from "./views/customer-service";
+import { ProcurementDashboard } from "./views/procurement";
+import { HrDashboard } from "./views/hr";
+import { ComplianceDashboard } from "./views/compliance";
 
 const ROLE_VIEW: Record<string, string> = {
   super_admin: "super_admin",
@@ -35,6 +41,14 @@ const ROLE_VIEW: Record<string, string> = {
   supplier_vendor: "customer",
   viewer_auditor: "auditor",
   platform_support_admin: "auditor",
+  customs_manager: "customs",
+  customs_officer: "customs",
+  port_operations_manager: "port_operations",
+  customer_service_manager: "customer_service",
+  customer_service_agent: "customer_service",
+  procurement_manager: "procurement",
+  hr_manager: "hr",
+  compliance_manager: "compliance",
 };
 
 export default async function DashboardPage({
@@ -112,6 +126,12 @@ export default async function DashboardPage({
       {view === "sales" && <SalesDashboard ctx={ctx} />}
       {view === "customer" && <CustomerDashboard ctx={ctx} />}
       {view === "auditor" && <AuditorDashboard ctx={ctx} />}
+      {view === "customs" && <CustomsDashboard ctx={ctx} />}
+      {view === "port_operations" && <PortOperationsDashboard ctx={ctx} />}
+      {view === "customer_service" && <CustomerServiceDashboard ctx={ctx} />}
+      {view === "procurement" && <ProcurementDashboard ctx={ctx} />}
+      {view === "hr" && <HrDashboard ctx={ctx} />}
+      {view === "compliance" && <ComplianceDashboard ctx={ctx} />}
       {!view && <ManagementOverview ctx={ctx} />}
     </div>
   );
