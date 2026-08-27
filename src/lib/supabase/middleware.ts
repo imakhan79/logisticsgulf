@@ -37,9 +37,10 @@ export async function updateSession(request: NextRequest, baseResponse: NextResp
   } = await supabase.auth.getUser();
 
   const bare = stripLocale(request.nextUrl.pathname);
-  const isAuthRoute = bare.startsWith("/login") || bare.startsWith("/auth");
+  const isPublicRoute =
+    bare === "/" || bare.startsWith("/login") || bare.startsWith("/register") || bare.startsWith("/auth");
 
-  if (!user && !isAuthRoute) {
+  if (!user && !isPublicRoute) {
     const url = request.nextUrl.clone();
     const localeMatch = request.nextUrl.pathname.match(/^\/([a-z]{2})(\/|$)/);
     const locale = localeMatch ? localeMatch[1] : routing.defaultLocale;
