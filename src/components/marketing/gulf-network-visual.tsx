@@ -54,12 +54,13 @@ export function GulfNetworkVisual({ className }: { className?: string }) {
             <motion.circle
               r="3"
               fill="#4fd1c8"
-              initial={{ offsetDistance: "0%", opacity: 0 }}
-              animate={{ offsetDistance: "100%", opacity: [0, 1, 1, 0] }}
-              transition={{ duration: 2.5, delay: 1 + i * 0.3, repeat: Infinity, repeatDelay: 1.5, ease: "linear" }}
-              style={{
-                offsetPath: `path("M${from.x},${from.y} L${to.x},${to.y}")`,
+              initial={{ opacity: 0 }}
+              animate={{
+                cx: [from.x, to.x],
+                cy: [from.y, to.y],
+                opacity: [0, 1, 1, 0],
               }}
+              transition={{ duration: 2.5, delay: 1 + i * 0.3, repeat: Infinity, repeatDelay: 1.5, ease: "linear" }}
             />
           </g>
         );
