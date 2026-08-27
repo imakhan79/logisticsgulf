@@ -26,6 +26,12 @@ export async function createShipment(locale: string, values: unknown) {
 
   if (!membership) return { error: "No company membership found for this user" };
 
+  const { data: allowed } = await supabase.rpc("has_permission", {
+    target_company_id: membership.company_id,
+    permission_key: "shipments.create",
+  });
+  if (!allowed) return { error: "You don't have permission to create shipments." };
+
   const { eta, ...rest } = parsed.data;
 
   const { error } = await supabase.from("shipments").insert({

@@ -6,6 +6,7 @@ const nav = [
   { href: "", label: "Overview" },
   { href: "orders", label: "Orders" },
   { href: "shipments", label: "Shipments" },
+  { href: "branches", label: "Branches" },
   { href: "routes", label: "Routes" },
   { href: "tracking", label: "Tracking" },
   { href: "customers", label: "Customers" },
@@ -43,7 +44,7 @@ export default async function DashboardLayout({
   return (
     <div className="flex min-h-screen flex-1">
       <aside className="w-56 shrink-0 border-e bg-neutral-50 p-4">
-        <div className="mb-6 text-sm font-semibold">LogisticsGulf</div>
+        <div className="mb-6 text-sm font-semibold">Gulf RouteWise</div>
         <nav className="space-y-1">
           {nav.map((item) => (
             <Link
