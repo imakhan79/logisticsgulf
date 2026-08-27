@@ -1,3 +1,5 @@
+import { can } from "@/lib/permissions";
+import { NoAccess } from "@/components/no-access";
 import { ShipmentForm } from "./shipment-form";
 
 export default async function NewShipmentPage({
@@ -6,6 +8,7 @@ export default async function NewShipmentPage({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
+  if (!(await can("shipments.create"))) return <NoAccess module="new shipment" />;
 
   return (
     <div className="p-8">

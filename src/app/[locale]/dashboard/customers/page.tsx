@@ -1,7 +1,11 @@
 import { createClient } from "@/lib/supabase/server";
+import { can } from "@/lib/permissions";
+import { NoAccess } from "@/components/no-access";
 import { CustomersTable, type Customer } from "./customers-table";
 
 export default async function CustomersPage() {
+  if (!(await can("customers.view"))) return <NoAccess module="customers" />;
+
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("customers")

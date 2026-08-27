@@ -1,7 +1,11 @@
 import { createClient } from "@/lib/supabase/server";
+import { can } from "@/lib/permissions";
+import { NoAccess } from "@/components/no-access";
 import { DriversTable, type Driver } from "./drivers-table";
 
 export default async function DriversPage() {
+  if (!(await can("drivers.view"))) return <NoAccess module="drivers" />;
+
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("drivers")

@@ -1,4 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
+import { can } from "@/lib/permissions";
+import { NoAccess } from "@/components/no-access";
 import { OrderForm } from "./order-form";
 
 export default async function NewOrderPage({
@@ -7,6 +9,8 @@ export default async function NewOrderPage({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
+  if (!(await can("orders.create"))) return <NoAccess module="new order" />;
+
   const supabase = await createClient();
   const { data: customers } = await supabase
     .from("customers")

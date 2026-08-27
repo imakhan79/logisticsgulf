@@ -1,7 +1,11 @@
 import { createClient } from "@/lib/supabase/server";
+import { can } from "@/lib/permissions";
+import { NoAccess } from "@/components/no-access";
 import { InventoryTable, type InventoryItem } from "./inventory-table";
 
 export default async function InventoryPage() {
+  if (!(await can("inventory.view"))) return <NoAccess module="inventory" />;
+
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("inventory")

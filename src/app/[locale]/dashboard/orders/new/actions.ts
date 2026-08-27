@@ -26,6 +26,12 @@ export async function createOrder(locale: string, values: unknown) {
 
   if (!membership) return { error: "No company membership found for this user" };
 
+  const { data: allowed } = await supabase.rpc("has_permission", {
+    target_company_id: membership.company_id,
+    permission_key: "orders.create",
+  });
+  if (!allowed) return { error: "You don't have permission to create orders." };
+
   const { weight, volume, ...rest } = parsed.data;
 
   const { error } = await supabase.from("orders").insert({

@@ -1,7 +1,11 @@
 import { createClient } from "@/lib/supabase/server";
+import { can } from "@/lib/permissions";
+import { NoAccess } from "@/components/no-access";
 import { MapLocationEmbed } from "@/components/map-embed";
 
 export default async function TrackingPage() {
+  if (!(await can("vehicles.view"))) return <NoAccess module="tracking" />;
+
   const supabase = await createClient();
   const { data: vehicles } = await supabase
     .from("vehicles")

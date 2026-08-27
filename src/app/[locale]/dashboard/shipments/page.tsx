@@ -1,9 +1,13 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { can } from "@/lib/permissions";
+import { NoAccess } from "@/components/no-access";
 import { ShipmentsTable, type Shipment } from "./shipments-table";
 
 export default async function ShipmentsPage() {
+  const canView = await can("shipments.view");
+  if (!canView) return <NoAccess module="shipments" />;
+
   const supabase = await createClient();
 
   const [{ data, error }, canCreate] = await Promise.all([
