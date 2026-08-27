@@ -1,20 +1,40 @@
 import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
-import { Package, Truck, ClipboardList, Wallet, IdCard, Ship } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { KpiCard } from "@/components/dashboard/kpi-card";
-import { OverviewChart } from "./overview-chart";
 import { CreateCompanyForm } from "./create-company-form";
+import type { DashboardContext } from "./views/types";
+import { ManagementOverview } from "./views/management-overview";
+import { SuperAdminDashboard } from "./views/super-admin";
+import { OperationsDashboard } from "./views/operations";
+import { DispatcherDashboard } from "./views/dispatcher";
+import { FleetDashboard } from "./views/fleet";
+import { DriverDashboard } from "./views/driver";
+import { WarehouseDashboard } from "./views/warehouse";
+import { FinanceDashboard } from "./views/finance";
+import { SalesDashboard } from "./views/sales";
+import { CustomerDashboard } from "./views/customer";
+import { AuditorDashboard } from "./views/auditor";
 
-type DashboardStats = {
-  shipments_total: number;
-  shipments_in_transit: number;
-  orders_total: number;
-  revenue_unpaid: number;
-  revenue_paid: number;
-  active_vehicles: number;
-  active_drivers: number;
+const ROLE_VIEW: Record<string, string> = {
+  super_admin: "super_admin",
+  operations_manager: "operations",
+  dispatcher: "dispatcher",
+  fleet_manager: "fleet",
+  maintenance_manager: "fleet",
+  maintenance_technician: "fleet",
+  transport_manager: "fleet",
+  driver: "driver",
+  warehouse_manager: "warehouse",
+  warehouse_staff: "warehouse",
+  finance: "finance",
+  accountant: "finance",
+  sales_manager: "sales",
+  sales_executive: "sales",
+  freight_forwarding_manager: "sales",
+  customer: "customer",
+  supplier_vendor: "customer",
+  viewer_auditor: "auditor",
+  platform_support_admin: "auditor",
 };
 
 export default async function DashboardPage({
@@ -32,7 +52,7 @@ export default async function DashboardPage({
 
   const { data: memberships } = await supabase
     .from("user_companies")
-    .select("company_id, companies(name), roles(name)")
+    .select("company_id, country_id, companies(name), roles(key, name)")
     .eq("user_id", user.id);
 
   const t = await getTranslations("dashboard");
@@ -51,73 +71,48 @@ export default async function DashboardPage({
     );
   }
 
-  const company = memberships[0].companies as unknown as { name: string } | null;
-  const role = memberships[0].roles as unknown as { name: string } | null;
-  const companyId = memberships[0].company_id;
+  const primary = memberships[0];
+  const company = primary.companies as unknown as { name: string } | null;
+  const role = primary.roles as unknown as { key: string; name: string } | null;
 
-  const [{ data: statsRaw }, { data: shipments }] = await Promise.all([
-    supabase.rpc("get_dashboard_stats", { target_company_id: companyId }),
-    supabase.from("shipments").select("status"),
-  ]);
-  const stats = statsRaw as unknown as DashboardStats | null;
+  const ctx: DashboardContext = {
+    supabase,
+    locale,
+    userId: user.id,
+    userEmail: user.email ?? "",
+    companyId: primary.company_id,
+    countryId: primary.country_id,
+    companyName: company?.name ?? "",
+    roleKey: role?.key ?? "",
+    roleName: role?.name ?? "",
+    memberships: memberships.map((m) => ({
+      companyName: (m.companies as unknown as { name: string } | null)?.name ?? "",
+      roleName: (m.roles as unknown as { name: string } | null)?.name ?? "",
+    })),
+  };
 
-  const statusCounts = Object.entries(
-    (shipments ?? []).reduce<Record<string, number>>((acc, s) => {
-      acc[s.status] = (acc[s.status] ?? 0) + 1;
-      return acc;
-    }, {}),
-  ).map(([status, count]) => ({ status, count }));
+  const view = ROLE_VIEW[ctx.roleKey];
 
   return (
     <div className="p-8">
       <div className="mb-6">
         <h1 className="text-2xl font-semibold tracking-tight">{t("title")}</h1>
         <p className="mt-1 text-sm text-foreground-muted">
-          {company?.name} · {role?.name}
+          {ctx.companyName} · {ctx.roleName}
         </p>
       </div>
 
-      {stats && (
-        <div className="mb-6 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-          <KpiCard label="Shipments" value={stats.shipments_total} icon={<Package className="h-4 w-4" />} accent="navy" />
-          <KpiCard label="In transit" value={stats.shipments_in_transit} icon={<Ship className="h-4 w-4" />} accent="ocean" />
-          <KpiCard label="Orders" value={stats.orders_total} icon={<ClipboardList className="h-4 w-4" />} accent="teal" />
-          <KpiCard label="Active vehicles" value={stats.active_vehicles} icon={<Truck className="h-4 w-4" />} accent="navy" />
-          <KpiCard label="Active drivers" value={stats.active_drivers} icon={<IdCard className="h-4 w-4" />} accent="ocean" />
-          <KpiCard label="Revenue collected" value={stats.revenue_paid} icon={<Wallet className="h-4 w-4" />} accent="teal" />
-          <KpiCard label="Revenue outstanding" value={stats.revenue_unpaid} icon={<Wallet className="h-4 w-4" />} accent="gold" />
-        </div>
-      )}
-
-      <div className="grid gap-4 md:grid-cols-2">
-        <Card>
-          <CardHeader>
-            <CardTitle>{t("yourCompanies")}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ul className="space-y-1 text-sm">
-              {memberships.map((m, i) => {
-                const c = m.companies as unknown as { name: string } | null;
-                const r = m.roles as unknown as { name: string } | null;
-                return (
-                  <li key={i} className="rounded-lg border border-border-subtle px-3 py-2">
-                    {c?.name} — {r?.name}
-                  </li>
-                );
-              })}
-            </ul>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Shipments by status</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <OverviewChart data={statusCounts} />
-          </CardContent>
-        </Card>
-      </div>
+      {view === "super_admin" && <SuperAdminDashboard ctx={ctx} />}
+      {view === "operations" && <OperationsDashboard ctx={ctx} />}
+      {view === "dispatcher" && <DispatcherDashboard ctx={ctx} />}
+      {view === "fleet" && <FleetDashboard ctx={ctx} />}
+      {view === "driver" && <DriverDashboard ctx={ctx} />}
+      {view === "warehouse" && <WarehouseDashboard ctx={ctx} />}
+      {view === "finance" && <FinanceDashboard ctx={ctx} />}
+      {view === "sales" && <SalesDashboard ctx={ctx} />}
+      {view === "customer" && <CustomerDashboard ctx={ctx} />}
+      {view === "auditor" && <AuditorDashboard ctx={ctx} />}
+      {!view && <ManagementOverview ctx={ctx} />}
     </div>
   );
 }
