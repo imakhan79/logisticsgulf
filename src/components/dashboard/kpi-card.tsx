@@ -1,8 +1,7 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, type ReactNode } from "react";
 import { motion, useInView, useMotionValue, useSpring } from "framer-motion";
-import type { LucideIcon } from "lucide-react";
 
 function Counter({ value }: { value: number }) {
   const ref = useRef<HTMLSpanElement>(null);
@@ -26,13 +25,13 @@ function Counter({ value }: { value: number }) {
 export function KpiCard({
   label,
   value,
-  icon: Icon,
+  icon,
   accent = "navy",
   suffix,
 }: {
   label: string;
   value: number;
-  icon: LucideIcon;
+  icon: ReactNode;
   accent?: "navy" | "teal" | "ocean" | "gold";
   suffix?: string;
 }) {
@@ -53,7 +52,7 @@ export function KpiCard({
       <div className="mb-3 flex items-center justify-between">
         <span className="text-xs font-medium text-foreground-muted">{label}</span>
         <div className={`flex h-8 w-8 items-center justify-center rounded-lg ${accentClass}`}>
-          <Icon className="h-4 w-4" />
+          {icon}
         </div>
       </div>
       <div className="text-2xl font-semibold tracking-tight">

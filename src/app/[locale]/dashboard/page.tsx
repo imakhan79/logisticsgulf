@@ -79,13 +79,13 @@ export default async function DashboardPage({
 
       {stats && (
         <div className="mb-6 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-          <KpiCard label="Shipments" value={stats.shipments_total} icon={Package} accent="navy" />
-          <KpiCard label="In transit" value={stats.shipments_in_transit} icon={Ship} accent="ocean" />
-          <KpiCard label="Orders" value={stats.orders_total} icon={ClipboardList} accent="teal" />
-          <KpiCard label="Active vehicles" value={stats.active_vehicles} icon={Truck} accent="navy" />
-          <KpiCard label="Active drivers" value={stats.active_drivers} icon={IdCard} accent="ocean" />
-          <KpiCard label="Revenue collected" value={stats.revenue_paid} icon={Wallet} accent="teal" />
-          <KpiCard label="Revenue outstanding" value={stats.revenue_unpaid} icon={Wallet} accent="gold" />
+          <KpiCard label="Shipments" value={stats.shipments_total} icon={<Package className="h-4 w-4" />} accent="navy" />
+          <KpiCard label="In transit" value={stats.shipments_in_transit} icon={<Ship className="h-4 w-4" />} accent="ocean" />
+          <KpiCard label="Orders" value={stats.orders_total} icon={<ClipboardList className="h-4 w-4" />} accent="teal" />
+          <KpiCard label="Active vehicles" value={stats.active_vehicles} icon={<Truck className="h-4 w-4" />} accent="navy" />
+          <KpiCard label="Active drivers" value={stats.active_drivers} icon={<IdCard className="h-4 w-4" />} accent="ocean" />
+          <KpiCard label="Revenue collected" value={stats.revenue_paid} icon={<Wallet className="h-4 w-4" />} accent="teal" />
+          <KpiCard label="Revenue outstanding" value={stats.revenue_unpaid} icon={<Wallet className="h-4 w-4" />} accent="gold" />
         </div>
       )}
 
