@@ -3,27 +3,27 @@
 // "free Google Maps, no key" request) but Google now blocks that iframe in
 // practice (confirmed blank on live testing) — OSM's embed endpoint is
 // actually reliable with no API key or billing account required.
+//
+// The embed only takes coordinates (no place-name search param, despite
+// what it might look like) — geocode free-text addresses server-side with
+// lib/geocode.ts before rendering this.
 
 function bboxAround(lat: number, lng: number, delta = 0.05) {
   return `${lng - delta},${lat - delta},${lng + delta},${lat + delta}`;
 }
 
 export function MapLocationEmbed({
-  query,
+  lat,
+  lng,
+  label,
   className,
 }: {
-  /** "lat,lng" (preferred) or a free-text place name */
-  query: string;
+  lat: number;
+  lng: number;
+  label?: string;
   className?: string;
 }) {
-  const [latStr, lngStr] = query.split(",").map((s) => s.trim());
-  const lat = Number(latStr);
-  const lng = Number(lngStr);
-  const isCoords = Number.isFinite(lat) && Number.isFinite(lng) && query.includes(",");
-
-  const src = isCoords
-    ? `https://www.openstreetmap.org/export/embed.html?bbox=${bboxAround(lat, lng)}&layer=mapnik&marker=${lat},${lng}`
-    : `https://www.openstreetmap.org/export/embed.html?search=${encodeURIComponent(query)}&layer=mapnik`;
+  const src = `https://www.openstreetmap.org/export/embed.html?bbox=${bboxAround(lat, lng)}&layer=mapnik&marker=${lat},${lng}`;
 
   return (
     <iframe
@@ -31,7 +31,7 @@ export function MapLocationEmbed({
       className={className ?? "h-64 w-full rounded-md border"}
       loading="lazy"
       referrerPolicy="no-referrer-when-downgrade"
-      title={`Map: ${query}`}
+      title={label ? `Map: ${label}` : "Map"}
     />
   );
 }
@@ -45,19 +45,35 @@ export function MapDirectionsEmbed({
   destination,
   className,
 }: {
-  origin: string;
-  destination: string;
+  origin: { label: string; lat: number; lng: number } | null;
+  destination: { label: string; lat: number; lng: number } | null;
   className?: string;
 }) {
   return (
     <div className="grid gap-3 sm:grid-cols-2">
       <div>
-        <p className="mb-1 text-xs font-medium text-neutral-500">Origin: {origin}</p>
-        <MapLocationEmbed query={origin} className={className ?? "h-64 w-full rounded-md border"} />
+        <p className="mb-1 text-xs font-medium text-neutral-500">
+          Origin: {origin?.label ?? "unknown"}
+        </p>
+        {origin ? (
+          <MapLocationEmbed lat={origin.lat} lng={origin.lng} label={origin.label} className={className} />
+        ) : (
+          <div className={className ?? "flex h-64 w-full items-center justify-center rounded-md border text-sm text-neutral-400"}>
+            Could not locate this address
+          </div>
+        )}
       </div>
       <div>
-        <p className="mb-1 text-xs font-medium text-neutral-500">Destination: {destination}</p>
-        <MapLocationEmbed query={destination} className={className ?? "h-64 w-full rounded-md border"} />
+        <p className="mb-1 text-xs font-medium text-neutral-500">
+          Destination: {destination?.label ?? "unknown"}
+        </p>
+        {destination ? (
+          <MapLocationEmbed lat={destination.lat} lng={destination.lng} label={destination.label} className={className} />
+        ) : (
+          <div className={className ?? "flex h-64 w-full items-center justify-center rounded-md border text-sm text-neutral-400"}>
+            Could not locate this address
+          </div>
+        )}
       </div>
     </div>
   );

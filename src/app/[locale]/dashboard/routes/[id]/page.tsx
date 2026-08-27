@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { MapDirectionsEmbed } from "@/components/map-embed";
+import { geocode } from "@/lib/geocode";
 
 export default async function RouteDetailPage({
   params,
@@ -17,6 +18,11 @@ export default async function RouteDetailPage({
 
   if (!route) notFound();
 
+  const [originCoords, destinationCoords] = await Promise.all([
+    geocode(route.origin),
+    geocode(route.destination),
+  ]);
+
   return (
     <div className="p-8">
       <h1 className="mb-1 text-2xl font-semibold">
@@ -25,7 +31,11 @@ export default async function RouteDetailPage({
       <p className="mb-4 text-sm text-neutral-500">
         {route.distance ? `${route.distance} km` : "-"} · {route.duration ? `${route.duration} min` : "-"}
       </p>
-      <MapDirectionsEmbed origin={route.origin} destination={route.destination} className="h-96 w-full rounded-md border" />
+      <MapDirectionsEmbed
+        origin={originCoords ? { label: route.origin, ...originCoords } : null}
+        destination={destinationCoords ? { label: route.destination, ...destinationCoords } : null}
+        className="h-96 w-full rounded-md border"
+      />
     </div>
   );
 }
