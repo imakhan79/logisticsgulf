@@ -1,0 +1,19 @@
+{
+  "login": {
+    "title": "Sign in to LogisticsGulf",
+    "subtitle": "Multi-tenant logistics platform",
+    "email": "Email",
+    "password": "Password",
+    "signIn": "Sign in",
+    "magicLinkEmail": "Email for magic link",
+    "sendMagicLink": "Send magic link",
+    "google": "Google",
+    "microsoft": "Microsoft"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "signedInAs": "Signed in as {email}",
+    "yourCompanies": "Your companies",
+    "noMembership": "No company membership yet."
+  }
+}

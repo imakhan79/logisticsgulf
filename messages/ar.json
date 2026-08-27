@@ -1,0 +1,19 @@
+{
+  "login": {
+    "title": "تسجيل الدخول إلى LogisticsGulf",
+    "subtitle": "منصة لوجستية متعددة المستأجرين",
+    "email": "البريد الإلكتروني",
+    "password": "كلمة المرور",
+    "signIn": "تسجيل الدخول",
+    "magicLinkEmail": "البريد الإلكتروني لرابط الدخول السريع",
+    "sendMagicLink": "إرسال رابط الدخول",
+    "google": "جوجل",
+    "microsoft": "مايكروسوفت"
+  },
+  "dashboard": {
+    "title": "لوحة التحكم",
+    "signedInAs": "مسجل الدخول باسم {email}",
+    "yourCompanies": "شركاتك",
+    "noMembership": "لا توجد عضوية شركة بعد."
+  }
+}
