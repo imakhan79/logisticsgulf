@@ -3,6 +3,7 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
 import { DataTable } from "@/components/data-table";
+import { formatDate } from "@/lib/format-date";
 
 export type Order = {
   id: string;
@@ -39,7 +40,7 @@ const columns: ColumnDef<Order>[] = [
   {
     accessorKey: "created_at",
     header: "Created",
-    cell: ({ getValue }) => new Date(getValue<string>()).toLocaleDateString(),
+    cell: ({ getValue }) => formatDate(getValue<string>()),
   },
 ];
 

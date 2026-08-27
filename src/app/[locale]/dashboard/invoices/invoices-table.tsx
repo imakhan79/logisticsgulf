@@ -3,6 +3,7 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
 import { DataTable } from "@/components/data-table";
+import { formatDate } from "@/lib/format-date";
 
 export type Invoice = {
   id: string;
@@ -35,7 +36,7 @@ const columns: ColumnDef<Invoice>[] = [
     header: "Due date",
     cell: ({ getValue }) => {
       const v = getValue<string | null>();
-      return v ? new Date(v).toLocaleDateString() : "-";
+      return v ? formatDate(v) : "-";
     },
   },
 ];

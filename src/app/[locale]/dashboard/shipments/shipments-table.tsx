@@ -3,6 +3,7 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
 import { DataTable } from "@/components/data-table";
+import { formatDate, formatDateTime } from "@/lib/format-date";
 
 export type Shipment = {
   id: string;
@@ -28,13 +29,13 @@ const columns: ColumnDef<Shipment>[] = [
     header: "ETA",
     cell: ({ getValue }) => {
       const value = getValue<string | null>();
-      return value ? new Date(value).toLocaleString() : "-";
+      return value ? formatDateTime(value) : "-";
     },
   },
   {
     accessorKey: "created_at",
     header: "Created",
-    cell: ({ getValue }) => new Date(getValue<string>()).toLocaleDateString(),
+    cell: ({ getValue }) => formatDate(getValue<string>()),
   },
 ];
 

@@ -2,6 +2,7 @@
 
 import type { ColumnDef } from "@tanstack/react-table";
 import { DataTable } from "@/components/data-table";
+import { formatDateTime } from "@/lib/format-date";
 
 export type AuditEntry = {
   id: string;
@@ -22,7 +23,7 @@ const columns: ColumnDef<AuditEntry>[] = [
   {
     accessorKey: "changed_at",
     header: "When",
-    cell: ({ getValue }) => new Date(getValue<string>()).toLocaleString(),
+    cell: ({ getValue }) => formatDateTime(getValue<string>()),
   },
 ];
 
