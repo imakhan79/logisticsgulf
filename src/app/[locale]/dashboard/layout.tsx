@@ -6,6 +6,23 @@ const nav = [
   { href: "", label: "Overview" },
   { href: "orders", label: "Orders" },
   { href: "shipments", label: "Shipments" },
+  { href: "routes", label: "Routes" },
+  { href: "tracking", label: "Tracking" },
+  { href: "customers", label: "Customers" },
+  { href: "vehicles", label: "Vehicles" },
+  { href: "drivers", label: "Drivers" },
+  { href: "fleet", label: "Fleet" },
+  { href: "warehouses", label: "Warehouses" },
+  { href: "inventory", label: "Inventory" },
+  { href: "deliveries", label: "Deliveries" },
+  { href: "customs", label: "Customs" },
+  { href: "invoices", label: "Invoices" },
+  { href: "payments", label: "Payments" },
+  { href: "reports", label: "Reports" },
+  { href: "settings", label: "Settings" },
+  { href: "users", label: "Users" },
+  { href: "roles", label: "Roles" },
+  { href: "audit", label: "Audit" },
 ];
 
 export default async function DashboardLayout({

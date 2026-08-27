@@ -3,6 +3,7 @@ import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { OverviewChart } from "./overview-chart";
+import { CreateCompanyForm } from "./create-company-form";
 
 export default async function DashboardPage({
   params,
@@ -25,14 +26,28 @@ export default async function DashboardPage({
     supabase.from("shipments").select("status"),
   ]);
 
+  const t = await getTranslations("dashboard");
+
+  if (!memberships?.length) {
+    const { data: countries } = await supabase.from("countries").select("id, name").order("name");
+
+    return (
+      <div className="p-8">
+        <h1 className="text-2xl font-semibold">{t("title")}</h1>
+        <p className="mt-1 text-sm text-neutral-500">{t("signedInAs", { email: user.email ?? "" })}</p>
+        <div className="mt-6">
+          <CreateCompanyForm countries={countries ?? []} />
+        </div>
+      </div>
+    );
+  }
+
   const statusCounts = Object.entries(
     (shipments ?? []).reduce<Record<string, number>>((acc, s) => {
       acc[s.status] = (acc[s.status] ?? 0) + 1;
       return acc;
     }, {}),
   ).map(([status, count]) => ({ status, count }));
-
-  const t = await getTranslations("dashboard");
 
   return (
     <div className="p-8">
@@ -46,15 +61,11 @@ export default async function DashboardPage({
           </CardHeader>
           <CardContent>
             <ul className="space-y-1 text-sm">
-              {memberships?.length ? (
-                memberships.map((m, i) => (
-                  <li key={i} className="rounded border px-3 py-2">
-                    {JSON.stringify(m)}
-                  </li>
-                ))
-              ) : (
-                <li className="text-neutral-400">{t("noMembership")}</li>
-              )}
+              {memberships.map((m, i) => (
+                <li key={i} className="rounded border px-3 py-2">
+                  {JSON.stringify(m)}
+                </li>
+              ))}
             </ul>
           </CardContent>
         </Card>
