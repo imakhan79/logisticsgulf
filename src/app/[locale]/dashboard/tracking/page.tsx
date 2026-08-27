@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
-import { GoogleMapLocationEmbed } from "@/components/google-map-embed";
+import { MapLocationEmbed } from "@/components/map-embed";
 
 export default async function TrackingPage() {
   const supabase = await createClient();
@@ -29,7 +29,7 @@ export default async function TrackingPage() {
                 <span className="font-medium">{v.plate_no}</span>
                 <span className="text-neutral-500">{v.status}</span>
               </div>
-              <GoogleMapLocationEmbed query={`${v.last_lat},${v.last_lng}`} className="h-48 w-full rounded-md border" />
+              <MapLocationEmbed query={`${v.last_lat},${v.last_lng}`} className="h-48 w-full rounded-md border" />
               <p className="mt-1 text-xs text-neutral-400">
                 Updated {v.last_location_at ? new Date(v.last_location_at).toLocaleString() : "-"}
               </p>

@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { GoogleMapDirectionsEmbed } from "@/components/google-map-embed";
+import { MapDirectionsEmbed } from "@/components/map-embed";
 
 export default async function RouteDetailPage({
   params,
@@ -25,7 +25,7 @@ export default async function RouteDetailPage({
       <p className="mb-4 text-sm text-neutral-500">
         {route.distance ? `${route.distance} km` : "-"} · {route.duration ? `${route.duration} min` : "-"}
       </p>
-      <GoogleMapDirectionsEmbed origin={route.origin} destination={route.destination} className="h-96 w-full rounded-md border" />
+      <MapDirectionsEmbed origin={route.origin} destination={route.destination} className="h-96 w-full rounded-md border" />
     </div>
   );
 }
