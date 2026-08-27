@@ -2,7 +2,7 @@ import {
   LayoutDashboard, FileText, ClipboardList, Package, Route as RouteIcon, MapPin,
   Building2, Users, Truck, IdCard, Gauge, Warehouse, Boxes, PackageCheck,
   FileCheck, Receipt, CreditCard, BarChart3, Settings, UserCog, ShieldCheck, History,
-  Ship, Headset, Handshake,
+  Ship, Headset, Handshake, Palette,
   type LucideIcon,
 } from "lucide-react";
 
@@ -63,6 +63,7 @@ export const NAV_GROUPS: NavGroup[] = [
       { href: "users", label: "Users", icon: UserCog, permission: "users.view" },
       { href: "roles", label: "Roles", icon: ShieldCheck, permission: "users.view" },
       { href: "audit", label: "Audit", icon: History, permission: "reports.view" },
+      { href: "design-system", label: "Design System", icon: Palette },
     ],
   },
 ];

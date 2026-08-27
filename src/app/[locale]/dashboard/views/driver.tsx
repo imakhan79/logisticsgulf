@@ -62,7 +62,7 @@ export async function DriverDashboard({ ctx }: { ctx: DashboardContext }) {
               </div>
 
               {trip.status === "in_transit" && (
-                <MarkDeliveredButton shipmentId={trip.id} locale={locale} />
+                <MarkDeliveredButton shipmentId={trip.id} locale={locale} companyId={companyId} />
               )}
               {trip.status === "pending" && (
                 <p className="text-xs text-foreground-muted">Waiting for dispatch.</p>

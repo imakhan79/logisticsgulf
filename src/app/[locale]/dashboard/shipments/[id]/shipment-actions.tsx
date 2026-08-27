@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { dispatchShipment, markDelivered, generateInvoice } from "./actions";
+import { FileUpload } from "@/components/ui/file-upload";
+import { useToast } from "@/components/ui/toast";
 
 type Option = { id: string; label: string };
 
@@ -77,27 +79,52 @@ export function DispatchForm({
   );
 }
 
-export function MarkDeliveredButton({ shipmentId, locale }: { shipmentId: string; locale: string }) {
+export function MarkDeliveredButton({
+  shipmentId,
+  locale,
+  companyId,
+}: {
+  shipmentId: string;
+  locale: string;
+  companyId?: string;
+}) {
   const router = useRouter();
+  const toast = useToast();
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
+  const [photoPath, setPhotoPath] = useState<string | null>(null);
 
   async function onClick() {
     setPending(true);
     setError(null);
-    const result = await markDelivered(shipmentId, locale);
+    const result = await markDelivered(shipmentId, locale, photoPath ?? undefined);
     setPending(false);
-    if (result?.error) setError(result.error);
-    else router.refresh();
+    if (result?.error) {
+      setError(result.error);
+    } else {
+      toast({ title: "Delivery recorded", description: photoPath ? "Proof of delivery saved." : undefined, variant: "success" });
+      router.refresh();
+    }
   }
 
   return (
-    <div>
-      {error && <p className="mb-2 text-sm text-red-600">{error}</p>}
+    <div className="max-w-sm space-y-3">
+      {error && <p className="text-sm text-red-600">{error}</p>}
+      {companyId && (
+        <div>
+          <p className="mb-1.5 text-xs font-medium text-foreground-muted">Proof of delivery (optional)</p>
+          <FileUpload
+            bucket="pod"
+            companyId={companyId}
+            accept="image/*"
+            onUploaded={(path) => setPhotoPath(path)}
+          />
+        </div>
+      )}
       <button
         disabled={pending}
         onClick={onClick}
-        className="rounded-md bg-neutral-900 px-3 py-2 text-sm font-medium text-white disabled:opacity-50"
+        className="rounded-lg bg-navy-900 px-3 py-2 text-sm font-medium text-white transition-all hover:bg-navy-800 disabled:opacity-50"
       >
         {pending ? "Saving..." : "Mark delivered"}
       </button>

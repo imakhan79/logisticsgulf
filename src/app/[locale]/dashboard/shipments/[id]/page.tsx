@@ -3,6 +3,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { can } from "@/lib/permissions";
 import { NoAccess } from "@/components/no-access";
+import { StatusBadge } from "@/components/ui/status-badge";
 import { DispatchForm, MarkDeliveredButton, GenerateInvoiceForm } from "./shipment-actions";
 
 export default async function ShipmentDetailPage({
@@ -17,7 +18,7 @@ export default async function ShipmentDetailPage({
   const { data: shipment } = await supabase
     .from("shipments")
     .select(
-      "id, shipment_no, status, eta, vehicle_id, driver_id, route_id, vehicles(plate_no), drivers(name), routes(origin, destination)",
+      "id, company_id, shipment_no, status, eta, vehicle_id, driver_id, route_id, vehicles(plate_no), drivers(name), routes(origin, destination)",
     )
     .eq("id", id)
     .single();
@@ -48,11 +49,9 @@ export default async function ShipmentDetailPage({
     <div className="p-8">
       <div className="mb-1 flex items-center gap-3">
         <h1 className="text-2xl font-semibold">{shipment.shipment_no}</h1>
-        <span className="rounded-full bg-neutral-100 px-2 py-0.5 text-xs font-medium text-neutral-700">
-          {shipment.status}
-        </span>
+        <StatusBadge status={shipment.status} />
       </div>
-      <p className="mb-6 text-sm text-neutral-500">
+      <p className="mb-6 text-sm text-foreground-muted">
         {vehicle?.plate_no ?? "No vehicle"} · {driver?.name ?? "No driver"} ·{" "}
         {route ? `${route.origin} → ${route.destination}` : "No route"}
       </p>
@@ -69,7 +68,7 @@ export default async function ShipmentDetailPage({
         )}
 
         {shipment.status === "in_transit" && canMarkDelivered && (
-          <MarkDeliveredButton shipmentId={shipment.id} locale={locale} />
+          <MarkDeliveredButton shipmentId={shipment.id} locale={locale} companyId={shipment.company_id} />
         )}
 
         {shipment.status === "delivered" && !invoice && canInvoice && (

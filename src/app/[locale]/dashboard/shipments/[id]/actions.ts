@@ -45,7 +45,7 @@ export async function dispatchShipment(
   return { error: null };
 }
 
-export async function markDelivered(shipmentId: string, locale: string) {
+export async function markDelivered(shipmentId: string, locale: string, photoPath?: string) {
   const supabase = await createClient();
   const {
     data: { user },
@@ -66,6 +66,7 @@ export async function markDelivered(shipmentId: string, locale: string) {
     shipment_id: shipment.id,
     driver_id: shipment.driver_id,
     status: "delivered",
+    photo_url: photoPath || null,
     created_by: user.id,
     updated_by: user.id,
   });

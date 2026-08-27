@@ -4,6 +4,7 @@ import { getMessages } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { Plus_Jakarta_Sans, Noto_Sans_Arabic, JetBrains_Mono } from "next/font/google";
 import { routing, rtlLocales } from "@/i18n/routing";
+import { ToastProvider } from "@/components/ui/toast";
 import "../globals.css";
 
 const jakarta = Plus_Jakarta_Sans({ variable: "--font-jakarta", subsets: ["latin"] });
@@ -41,7 +42,9 @@ export default async function LocaleLayout({
       className={`${jakarta.variable} ${notoArabic.variable} ${mono.variable} h-full antialiased`}
     >
       <body className={`min-h-full flex flex-col ${isRtl ? "font-arabic" : "font-sans"}`}>
-        <NextIntlClientProvider messages={messages}>{children}</NextIntlClientProvider>
+        <NextIntlClientProvider messages={messages}>
+          <ToastProvider>{children}</ToastProvider>
+        </NextIntlClientProvider>
       </body>
     </html>
   );
