@@ -2,6 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { DEMO_PASSWORD } from "./demo-users";
 
 export async function signInWithPassword(formData: FormData) {
   const locale = String(formData.get("locale") ?? "en");
@@ -35,6 +36,21 @@ export async function signInWithMagicLink(formData: FormData) {
   }
 
   redirect(`/${locale}/login?message=Check your email for the magic link`);
+}
+
+export async function demoSignIn(email: string, locale: string) {
+  const supabase = await createClient();
+
+  const { error } = await supabase.auth.signInWithPassword({
+    email,
+    password: DEMO_PASSWORD,
+  });
+
+  if (error) {
+    redirect(`/${locale}/login?error=${encodeURIComponent(error.message)}`);
+  }
+
+  redirect(`/${locale}/dashboard`);
 }
 
 export async function signInWithOAuth(provider: "google" | "azure", locale: string) {
