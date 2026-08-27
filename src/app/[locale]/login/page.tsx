@@ -1,4 +1,3 @@
-import { getTranslations } from "next-intl/server";
 import { GulfNetworkVisual } from "@/components/marketing/gulf-network-visual";
 import { LoginCard } from "./login-card";
 
@@ -11,7 +10,6 @@ export default async function LoginPage({
 }) {
   const { locale } = await params;
   const { error, message } = await searchParams;
-  const t = await getTranslations("login");
 
   return (
     <div className="flex min-h-screen flex-1">
@@ -32,12 +30,7 @@ export default async function LoginPage({
       </div>
 
       <div className="flex flex-1 items-center justify-center bg-background px-6 py-12">
-        <LoginCard
-          locale={locale}
-          t={(key) => t(key as Parameters<typeof t>[0])}
-          error={error}
-          message={message}
-        />
+        <LoginCard locale={locale} error={error} message={message} />
       </div>
     </div>
   );

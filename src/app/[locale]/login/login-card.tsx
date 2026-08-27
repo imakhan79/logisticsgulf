@@ -2,20 +2,21 @@
 
 import { motion } from "framer-motion";
 import { ShieldCheck } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { signInWithPassword, signInWithMagicLink, signInWithOAuth, demoSignIn } from "./actions";
 import { DEMO_USERS } from "./demo-users";
 
 export function LoginCard({
   locale,
-  t,
   error,
   message,
 }: {
   locale: string;
-  t: (key: string) => string;
   error?: string;
   message?: string;
 }) {
+  const t = useTranslations("login");
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 16 }}
