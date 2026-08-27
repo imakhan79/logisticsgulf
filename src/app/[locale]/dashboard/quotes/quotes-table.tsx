@@ -4,25 +4,22 @@ import type { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
 import { DataTable } from "@/components/data-table";
 
-export type Order = {
+export type Quote = {
   id: string;
-  order_no: string;
-  origin: string | null;
-  destination: string | null;
-  weight: number | null;
-  volume: number | null;
+  quote_no: string;
   status: string;
+  amount: number | null;
   created_at: string;
   customers: { name: string } | null;
 };
 
-const columns: ColumnDef<Order>[] = [
+const columns: ColumnDef<Quote>[] = [
   {
-    accessorKey: "order_no",
-    header: "Order #",
+    accessorKey: "quote_no",
+    header: "Quote #",
     cell: ({ row }) => (
-      <Link href={`orders/${row.original.id}`} className="text-neutral-900 underline underline-offset-2">
-        {row.original.order_no}
+      <Link href={`quotes/${row.original.id}`} className="text-neutral-900 underline underline-offset-2">
+        {row.original.quote_no}
       </Link>
     ),
   },
@@ -31,11 +28,8 @@ const columns: ColumnDef<Order>[] = [
     header: "Customer",
     cell: ({ row }) => row.original.customers?.name ?? "-",
   },
-  { accessorKey: "origin", header: "Origin" },
-  { accessorKey: "destination", header: "Destination" },
-  { accessorKey: "weight", header: "Weight (kg)" },
-  { accessorKey: "volume", header: "Volume (m³)" },
   { accessorKey: "status", header: "Status" },
+  { accessorKey: "amount", header: "Amount" },
   {
     accessorKey: "created_at",
     header: "Created",
@@ -43,6 +37,6 @@ const columns: ColumnDef<Order>[] = [
   },
 ];
 
-export function OrdersTable({ data }: { data: Order[] }) {
+export function QuotesTable({ data }: { data: Quote[] }) {
   return <DataTable columns={columns} data={data} />;
 }

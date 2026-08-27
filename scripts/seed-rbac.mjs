@@ -4,7 +4,7 @@ import { config } from "dotenv";
 config({ path: ".env.local" });
 
 const MODULES = [
-  "orders", "shipments", "routes", "vehicles", "drivers", "warehouses",
+  "quotes", "orders", "shipments", "routes", "vehicles", "drivers", "warehouses",
   "inventory", "deliveries", "customers", "invoices", "payments",
   "expenses", "customs", "ports", "users", "reports",
 ];
@@ -14,6 +14,8 @@ const SPECIAL_PERMISSIONS = [
   ["shipments.cancel", "Cancel a shipment"],
   ["invoices.approve", "Approve an invoice"],
   ["customs.clear", "Mark a customs declaration cleared"],
+  ["quotes.approve", "Approve a quote"],
+  ["quotes.convert", "Convert an accepted quote into an order"],
 ];
 
 function manage(mod) {
@@ -84,12 +86,14 @@ const ROLE_PERMISSIONS = {
     ...viewExport("orders"), ...viewExport("shipments"), ...viewExport("invoices"),
     ...viewExport("payments"), ...viewExport("expenses"), ...view("reports"),
     ...viewExport("routes"), ...viewExport("deliveries"), ...viewExport("inventory"),
+    ...viewExport("quotes"),
   ],
   country_admin: [
     ...manage("orders"), ...manage("shipments"), ...manage("routes"), ...manage("vehicles"),
     ...manage("drivers"), ...manage("warehouses"), ...manage("customers"), ...manage("deliveries"),
     ...manage("customs"), ...view("reports"), ...view("inventory"),
     ...viewExport("invoices"), ...viewExport("payments"), ...viewExport("expenses"),
+    ...manage("quotes"), "quotes.approve", "quotes.convert",
   ],
   branch_manager: [
     ...manage("customers"), ...manage("orders"), ...manage("shipments"), ...manage("vehicles"),
@@ -114,14 +118,14 @@ const ROLE_PERMISSIONS = {
   driver: [...view("shipments"), ...some("deliveries", ["create", "edit"]), ...view("routes")],
   warehouse_manager: [...manage("warehouses"), ...manage("inventory"), ...some("deliveries", ["view", "edit"]), ...view("reports")],
   warehouse_staff: [...some("inventory", ["view", "edit"]), ...some("deliveries", ["view", "edit"])],
-  freight_forwarding_manager: [...manage("orders"), ...manage("shipments"), ...some("invoices", ["view", "create"])],
+  freight_forwarding_manager: [...manage("orders"), ...manage("shipments"), ...some("invoices", ["view", "create"]), ...manage("quotes"), "quotes.convert"],
   customs_manager: [...manage("customs"), "customs.clear"],
   customs_officer: [...some("customs", ["view", "edit"])],
   port_operations_manager: [...manage("ports")],
   finance: [...manage("invoices"), "invoices.approve", ...manage("payments"), ...manage("expenses"), ...view("reports"), ...view("orders"), ...view("shipments")],
   accountant: [...some("invoices", ["view", "create", "edit"]), ...manage("payments"), ...manage("expenses"), ...view("reports"), ...view("orders")],
-  sales_manager: [...manage("customers"), ...some("orders", ["view", "create", "edit"]), ...view("reports")],
-  sales_executive: [...some("customers", ["view", "create", "edit"]), ...some("orders", ["view", "create"])],
+  sales_manager: [...manage("customers"), ...some("orders", ["view", "create", "edit"]), ...view("reports"), ...manage("quotes"), "quotes.approve", "quotes.convert"],
+  sales_executive: [...some("customers", ["view", "create", "edit"]), ...some("orders", ["view", "create"]), ...some("quotes", ["view", "create", "edit"])],
   customer_service_manager: [...view("customers"), ...view("orders"), ...view("shipments"), ...view("deliveries")],
   customer_service_agent: [...view("customers"), ...view("shipments")],
   procurement_manager: [...manage("expenses")],
@@ -129,7 +133,7 @@ const ROLE_PERMISSIONS = {
   compliance_manager: [...view("vehicles"), ...view("drivers"), ...view("customs"), ...view("reports")],
   maintenance_manager: [...some("vehicles", ["view", "edit"]), ...view("reports")],
   maintenance_technician: [...some("vehicles", ["view", "edit"])],
-  customer: [...view("orders"), ...view("shipments"), ...view("invoices")],
+  customer: [...view("orders"), ...view("shipments"), ...view("invoices"), ...some("quotes", ["view", "create"])],
   supplier_vendor: [],
   viewer_auditor: MODULES.flatMap(view),
 };

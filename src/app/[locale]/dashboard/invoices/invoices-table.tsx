@@ -1,6 +1,7 @@
 "use client";
 
 import type { ColumnDef } from "@tanstack/react-table";
+import Link from "next/link";
 import { DataTable } from "@/components/data-table";
 
 export type Invoice = {
@@ -13,7 +14,15 @@ export type Invoice = {
 };
 
 const columns: ColumnDef<Invoice>[] = [
-  { accessorKey: "invoice_number", header: "Invoice #" },
+  {
+    accessorKey: "invoice_number",
+    header: "Invoice #",
+    cell: ({ row }) => (
+      <Link href={`invoices/${row.original.id}`} className="text-neutral-900 underline underline-offset-2">
+        {row.original.invoice_number}
+      </Link>
+    ),
+  },
   {
     id: "customer",
     header: "Customer",
